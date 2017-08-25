@@ -1,0 +1,22 @@
+{% block content %}
+{% block title %}Search{% endblock %}
+    {% if "q" in request.GET %}
+       <h1>Posts containing "{{ cd.q }}"</h1>
+       <h3>Found {{ total_results }} result{{ total_results|pluralize}}</h3>
+       {% for result in results %}
+           {% with post=result.object %}
+               <h4><a href="{{ post.url }}">{{ post.title }}</a></h4>
+               {{ post.content|truncatewords:5 }}
+           {% endwith %}
+       {% empty %}
+           <p>There are no results for your query.</p>
+       {% endfor %}
+       <p><a href="{% url "search_view" %}">Search again</a></p>
+   {% else %}
+       <h1>Search for posts</h1>
+       <form action="." method="get">
+       {{ form.as_p }}
+       <input type="submit" value="Search">
+       </form>
+   {% endif %}
+{% endblock %}
